@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 //Custom components
 import GoalItem from "../../components/GoalItem";
@@ -14,28 +15,39 @@ import GoalInput from "../../components/GoalInput";
 import GoalsKey from "../../components/GoalsKey";
 import EditGoal from "../../components/EditGoal";
 
-function TasksScreen() {
+function TasksScreen(props) {
   const [tasks, setTasks] = useState([]);
   const [isAddMode, setIsAddMode] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editInitalText, setEditInitalText] = useState();
   const [editKey, setEditKey] = useState();
+  const [filterType, setfilterType] = useState(null);
+
+  useEffect(() => {
+    const totalTasksCompleted = tasks.reduce((count, task) => {
+      if (task.isCompleted) {
+        count++;
+      }
+      return count;
+    }, 0);
+    props.setStats({
+      totalTasks: tasks.length,
+      totalTasksCompleted,
+      totalTasksPending: tasks.length - totalTasksCompleted,
+    });
+  }, [tasks]);
 
   //Takes user inputted goal, and adds to array
   const addGoalHandler = (task) => {
-    setTasks((currentGoals) => [
-      ...currentGoals,
-      task,
-      // { key: Math.random(), value: goalTitle, isCompleted, setIsCompleted },
-    ]);
+    setTasks((currentGoals) => [...currentGoals, task]);
     setIsAddMode(false); //Close modal once added
   };
 
   //Takes key of chosen item(goal) and filters array
   const removeGoalHandler = (goalKey) => {
-    setTasks((currentGoals) => {
-      return currentGoals.filter((goal) => goal.key !== goalKey);
-    });
+    setTasks((currentGoals) =>
+      currentGoals.filter((goal) => goal.key !== goalKey)
+    );
   };
 
   //Takes editted goal + key of goal, creates new array and sets CourseGoals to that array
@@ -52,15 +64,25 @@ function TasksScreen() {
   };
 
   const handleTaskStateChange = (selectedTask) => {
-    const newCourseGoals = tasks.map((goal) => {
-      console.log(selectedTask, goal);
-      if (goal.key === selectedTask.key) {
+    const newTasks = tasks.map((task) => {
+      if (task.key === selectedTask.key) {
         selectedTask.isCompleted = !selectedTask.isCompleted;
         return selectedTask;
       }
-      return goal;
+      return task;
     });
-    setTasks(newCourseGoals);
+    setTasks(newTasks);
+  };
+
+  const getTasks = () => {
+    if(filterType===null){
+      return tasks;
+    } else if(filterType==='completed'){
+      return tasks.filter((task) => task.isCompleted)
+    } else if(filterType==='pending'){
+      return tasks.filter((task) => !task.isCompleted)
+    }
+
   };
 
   const renderItem = ({ item }) => {
@@ -84,7 +106,11 @@ function TasksScreen() {
         style={styles.addTouchable}
         onPress={() => setIsAddMode(true)}
       >
-        <Text style={styles.addNewTaskText}>Add new task</Text>
+        <Ionicons 
+        name="add-circle-outline" 
+        size={45} 
+        color='#3b7dff'
+        />
       </TouchableOpacity>
       <GoalInput
         visible={isAddMode}
@@ -93,18 +119,18 @@ function TasksScreen() {
       />
       <View style={styles.goalListContainer}>
         <FlatList
-          data={tasks} //flat list takes data (the array of goals)
+          data={getTasks()} //flat list takes data (the array of goals)
           renderItem={renderItem}
         />
       </View>
       <EditGoal
         visible={isEditMode}
         onCancelEdit={() => setIsEditMode(false)}
-        onPressEdit={editChangeHandler}
+        onPressConfirm={editChangeHandler}
         defaultValue={editInitalText}
         itemKey={editKey}
       />
-      <GoalsKey />
+      <GoalsKey onFilter={setfilterType} />
     </SafeAreaView>
   );
 }

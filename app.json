@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GoalsProgram",
-    "slug": "GoalsProgram",
+    "name": "Foucs Tasks",
+    "slug": "Foucs Tasks",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

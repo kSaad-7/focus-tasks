@@ -9,7 +9,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 const GoalItem = (props) => {
   return (
     <TouchableOpacity
-      onLongPress={() => console.log("word")}
       style={[
         styles.listItem,
         { backgroundColor: props.item.isCompleted ? "#89e882bb" : "#f55151cc" },

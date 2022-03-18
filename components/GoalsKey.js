@@ -1,22 +1,29 @@
 import react from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-//MAYBE CHANGE COLOURS OF KEYS ONCE WHOLE PROGRAM FINISED
-
-const GoalsKey = () => {
+const GoalsKey = (props) => {
   return (
     <View style={styles.container}>
-      <View style={styles.notCompleteKey}>
-        <Ionicons name="ellipse" color="#e82417" size={7} />
+      <TouchableOpacity
+        style={styles.allKey}
+        onPress={() => props.onFilter(null)}
+      >
+        <Text style={[styles.keyText, { color: "#123bc4" }]}>All</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.notCompleteKey}
+        onPress={() => props.onFilter("pending")}
+      >
         <Text style={[styles.keyText, { color: "#e82417" }]}>
-          Not yet completed
+          Pending
         </Text>
-      </View>
-      <View style={styles.completeKey}>
-        <Ionicons name="ellipse" color="#56bd2d" size={7} />
-        <Text style={[styles.keyText, { color: "#56bd2d" }]}>Completed</Text>
-      </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.completeKey}
+        onPress={() => props.onFilter("completed")}
+      >
+        <Text style={[styles.keyText, { color: "#409431ff" }]}>Completed</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -27,25 +34,34 @@ const styles = StyleSheet.create({
     flex: 0.13,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
+  },
+
+  allKey: {
+    backgroundColor: "#9cb6e6",
+    justifyContent: "center",
+    flex:1,
+    height: '100%',
   },
 
   notCompleteKey: {
-    // backgroundColor: "red",
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#e69c9c",
+    justifyContent: "center",
+    flex:1,
+    height: '100%',
   },
 
   completeKey: {
-    // backgroundColor: "red",
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#9ce6a2",
+    justifyContent: "center",
+    flex:1,
+    height: '100%',
   },
 
   keyText: {
     marginLeft: 3,
-    fontSize: 14,
+    fontSize: 17,
+    textAlign: 'center',
   },
 });
 

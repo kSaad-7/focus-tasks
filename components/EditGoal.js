@@ -27,9 +27,9 @@ const EditGoal = (props) => {
           <Button title="Cancel" color="#f52f2f" onPress={props.onCancelEdit} />
           <TouchableOpacity
             style={styles.editButton}
-            onPress={() => props.onPressEdit(newGoal,props.itemKey)} //Pass both the new goal + itemKey
+            onPress={() => props.onPressConfirm(newGoal,props.itemKey)} //Pass both the new goal + itemKey
           >
-            <Text style={{fontSize:18, color:'#378a13'}}>Edit</Text>
+            <Text style={{fontSize:18, color:'#378a13'}}>Confirm</Text>
           </TouchableOpacity>
         </View>
       </View>

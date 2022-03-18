@@ -33,10 +33,12 @@ const GoalInput = (props) => {
           <Text style={{ fontWeight: "500" }}>Add a task</Text>
         </View>
         <TextInput
+          autoFocus={true}
           style={styles.goalInput}
           placeholder="Enter task"
           placeholderTextColor="grey"
           onChangeText={goalInputHandler}
+          onSubmitEditing={addButtonHandler}
           value={enteredGoal}
         />
         <View style={styles.buttonsContainer}>
